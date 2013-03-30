@@ -60,12 +60,15 @@ public class Board {
 		if (outOfBounds(x, y))
 			return false;
 
-
 		if (player.equals("x")) {
-
+			
 			int r_dist = Math.abs(x_pos[0] - x);
 			int c_dist = Math.abs(x_pos[1] - y);
 
+			if (r_dist == 0 && c_dist == 0) {
+				System.out.println("Need to move to another spot!");
+				return false;
+			}
 
 			if ( (x < x_pos[0]) && (y == x_pos[1])) { 	// North?
 				// check each square above "x"
@@ -104,6 +107,14 @@ public class Board {
 			} 
 			// Now we have to check diagonals
 			else if (r_dist == c_dist) {
+				System.out.println("Diagonals!");
+				// NW?
+				if (x < x_pos[0] && y < x_pos[1]) {
+					for (int i = 1; i <= c_dist; i++) {
+						if (isFilled(x_pos[0]-i, x_pos[1]-i))
+							return false;
+					}
+				}
 
 			}
 
@@ -196,32 +207,9 @@ public class Board {
 	public static void main(String[] args) {
 		Board asdf = new Board();
 		asdf.printBoard();
-		// CARDINAL DIRECTIONS
 
-		asdf.move("x", 2, 2);
-		asdf.move("x", 5, 2);
-		asdf.move("x", 8, 2);
+		
 
-		asdf.printBoard();
-
-		System.out.println("seeing if I can move north with obstacles");
-		asdf.move("x", 3, 2); 
-		asdf.move("x", 1, 2);
-		asdf.move("x", 5, 1);
-		asdf.printBoard();
-
-		System.out.println("seeing if I can move east with obstacles");
-		asdf.move("x", 5, 8);
-		asdf.printBoard();
-
-		System.out.println("seeing if I can move west with obstacles");
-		asdf.move("x", 8, 4);
-		asdf.move("x", 8, 1);
-
-		//seeing if I can move south with obstacles
-		System.out.println("Moving south with obstacles, also trying to overwrite player o");
-		asdf.move("x", 8, 8);
-		asdf.printBoard();
 
 	}
 
