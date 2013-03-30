@@ -60,69 +60,96 @@ public class Board {
 		if (outOfBounds(x, y))
 			return false;
 
+		int r_pos, c_pos;
 		if (player.equals("x")) {
-			
-			int r_dist = Math.abs(x_pos[0] - x);
-			int c_dist = Math.abs(x_pos[1] - y);
-
-			if (r_dist == 0 && c_dist == 0) {
-				System.out.println("Need to move to another spot!");
-				return false;
-			}
-
-			if ( (x < x_pos[0]) && (y == x_pos[1])) { 	// North?
-				// check each square above "x"
-				for (int i = 1; i <= r_dist; i++) {
-					if (isFilled(x_pos[0]-i, y))
-						return false;
-				} 
-				return true; // checked each square above "x", no obstructions
-			} 
-			// South?
-			else if ( (x > x_pos[0]) && (y == x_pos[1])) {
-				// check each square below "x"
-				for (int i = 1; i <= r_dist; i++) {
-					if (isFilled(x_pos[0]+i, y))
-						return false;
-				}
-				return true; // checked each square above "x", no obstructions
-			}
-			// West?
-			else if ( (x == x_pos[0]) && (y < x_pos[1])) {
-				// check each square left of "x"
-				for (int i = 1; i <= c_dist; i++) {
-					if (isFilled(x, x_pos[1]-i))
-						return false;
-				}
-				return true; // checked each square above "x", no obstructions
-			}
-			// East?
-			else if ( (x == x_pos[0]) && (y > x_pos[1])) {
-				// check each square right of "x"
-				for (int i = 1; i <= c_dist; i++) {
-					if (isFilled(x, x_pos[1]+i))
-						return false;
-				}
-				return true; // checked each square above "x", no obstructions
-			} 
-			// Now we have to check diagonals
-			else if (r_dist == c_dist) {
-				System.out.println("Diagonals!");
-				// NW?
-				if (x < x_pos[0] && y < x_pos[1]) {
-					for (int i = 1; i <= c_dist; i++) {
-						if (isFilled(x_pos[0]-i, x_pos[1]-i))
-							return false;
-					}
-				}
-
-			}
-
-		} else {
-
+			r_pos = x_pos[0];
+			c_pos = x_pos[1];
+		} else {				// player is "o"
+			r_pos = o_pos[0];
+			c_pos = o_pos[1];
 		}
 
-		return true;
+		int r_dist = Math.abs(r_pos - x);
+		int c_dist = Math.abs(c_pos - y);
+
+		if (r_dist == 0 && c_dist == 0) {
+			System.out.println("Need to move to another spot!");
+			return false;
+		}
+
+		if ( (x < r_pos) && (y == c_pos)) { 	// North?
+			// check each square above "x"
+			for (int i = 1; i <= r_dist; i++) {
+				if (isFilled(r_pos-i, y))
+					return false;
+			} 
+			return true; // checked each square above "x", no obstructions
+		} 
+		// South?
+		else if ( (x > r_pos) && (y == c_pos)) {
+			// check each square below "x"
+			for (int i = 1; i <= r_dist; i++) {
+				if (isFilled(r_pos+i, y))
+					return false;
+			}
+			return true; // checked each square above "x", no obstructions
+		}
+		// West?
+		else if ( (x == r_pos) && (y < c_pos)) {
+			// check each square left of "x"
+			for (int i = 1; i <= c_dist; i++) {
+				if (isFilled(x, c_pos-i))
+					return false;
+			}
+			return true; // checked each square above "x", no obstructions
+		}
+		// East?
+		else if ( (x == r_pos) && (y > c_pos)) {
+			// check each square right of "x"
+			for (int i = 1; i <= c_dist; i++) {
+				if (isFilled(x, c_pos+i))
+					return false;
+			}
+			return true; // checked each square above "x", no obstructions
+		} 
+		// Now we have to check diagonals
+		else if (r_dist == c_dist) {
+			// NW?
+			if (x < r_pos && y < c_pos) {
+				for (int i = 1; i <= c_dist; i++) {
+					if (isFilled(r_pos-i, c_pos-i))
+						return false;
+				}
+				return true; // checked squares NW of "x", no obstructions
+			} 
+			// NE?
+			else if (x < r_pos && y > c_pos) {
+				for (int i = 1; i <= c_dist; i++) {
+					if (isFilled(r_pos-i, c_pos+i))
+						return false;
+				}
+				return true; // checked squares NW of "x", no obstructions
+			} 
+			// SE?
+			else if (x > r_pos && y > c_pos) {
+				for (int i = 1; i <= c_dist; i++) {
+					if (isFilled(r_pos+i, c_pos+i))
+						return false;
+				}
+				return true; // checked squares NW of "x", no obstructions
+			}
+			// SW?
+			else if (x > r_pos && y < c_pos) {
+				for (int i = 1; i <= c_dist; i++) {
+					if (isFilled(r_pos-i, c_pos+i))
+						return false;
+				}
+				return true; // checked squares NW of "x", no obstructions
+			} 
+
+		}		
+		System.out.println("Neither cardinal nor diagonal");
+		return false; // Neither diagonal nor cardinal
 	}
 
 	public boolean outOfBounds(int x, int y)
@@ -140,33 +167,28 @@ public class Board {
 	 */
 	public boolean lose(String player)
 	{
-		// outOfBounds(int x, int y)
 
+		int r_pos, c_pos;
 		if (player.equals("x")) {
-			for (int i = -1; i < 2; i++) {
-				for (int j = -1; j < 2; j++) {
-					if (i != 0 && j != 0){
-						if (!outOfBounds(x_pos[0] + i, x_pos[1] + j)) {
-							if (isEmpty(x_pos[0]+i, x_pos[1]+j))
-								return false;
-						}
-					}
-				}
-			}
-			return true;
-		} else {
-			for (int i = -1; i < 2; i++) {
-				for (int j = -1; j < 2; j++) {
-					if (i != 0 && j != 0){
-						if (!outOfBounds(o_pos[0] + i, o_pos[1] + j)) {
-							if (isEmpty(o_pos[0]+i, o_pos[1]+j))
-								return false;
-						}
-					}
-				}
-			}
-			return true;
+			r_pos = x_pos[0];
+			c_pos = x_pos[1];
+		} else {				// player is "o"
+			r_pos = o_pos[0];
+			c_pos = o_pos[1];
 		}
+
+		for (int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j++) {
+				if (i != 0 && j != 0){
+					if (!outOfBounds(r_pos + i, c_pos + j)) {
+						if (isEmpty(r_pos+i, c_pos+j))
+							return false;
+					}
+				}
+			}
+		}
+		return true;
+
 	}
 
 	/*
@@ -208,9 +230,7 @@ public class Board {
 		Board asdf = new Board();
 		asdf.printBoard();
 
-		
-
-
+		asdf.move("o", 6, 3); // shouldnt work
 	}
 
 }

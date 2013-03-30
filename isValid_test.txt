@@ -27,3 +27,37 @@
 		System.out.println("Moving south with obstacles, also trying to overwrite player o");
 		asdf.move("x", 8, 8);
 		asdf.printBoard();
+
+
+		/*	*	*	*	*/
+		
+		// CARDINALS AND DIAGONALS
+		
+		asdf.move("x", 2, 2);
+		asdf.move("x", 2, 4);
+		asdf.move("x", 2, 6);
+		asdf.move("x", 4, 6);
+		asdf.move("x", 6, 6);
+		asdf.move("x", 6, 4);
+		asdf.move("x", 6, 2);
+		asdf.move("x", 4, 2);
+		asdf.move("x", 4, 4);
+		
+		asdf.printBoard();
+		
+		// now see if we get 7 invalids (we'll check north separately)
+		
+		asdf.move("x", 2, 4); // N
+		asdf.move("x", 1, 7); // NE
+		asdf.move("x", 4, 8); // E
+		asdf.move("x", 7, 7); // SE
+		asdf.move("x", 8, 4); // S
+		asdf.move("x", 7, 1); // SW
+		asdf.move("x", 4, 1); // W
+
+		System.out.println("checking NW");
+		
+		asdf.move("x", 5, 3);
+		asdf.move("x", 3, 1);
+		
+		asdf.printBoard(); 
