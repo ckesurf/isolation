@@ -1,3 +1,5 @@
+//import java.lang.Math;
+
 
 public class Board {
 	public String[][] board;
@@ -49,7 +51,7 @@ public class Board {
 	public boolean isValid(String player, int x, int y)
 	{
 		/*
-		 *  if there is a hole in the path to destination (x, y) in our case,
+		 *  if there is an obstacle in the path to destination (x, y),
 		 *  return false.
 		 */
 		// for this first go, we assume all given moves are valid "queen" moves
@@ -57,21 +59,26 @@ public class Board {
 
 		if (outOfBounds(x, y))
 			return false;
-		
+
+
 		if (player.equals("x")) {
+
+			int r_dist = Math.abs(x_pos[0] - x);
+			int c_dist = Math.abs(x_pos[1] - y);
+
 
 			if ( (x < x_pos[0]) && (y == x_pos[1])) { 	// North?
 				// check each square above "x"
-				for (int i = 1; i <= (x_pos[0]-x); i++) {
+				for (int i = 1; i <= r_dist; i++) {
 					if (isFilled(x_pos[0]-i, y))
 						return false;
-				}
+				} 
 				return true; // checked each square above "x", no obstructions
 			} 
 			// South?
 			else if ( (x > x_pos[0]) && (y == x_pos[1])) {
-				// check each square above "x"
-				for (int i = 1; i <= (x - x_pos[0]); i++) {
+				// check each square below "x"
+				for (int i = 1; i <= r_dist; i++) {
 					if (isFilled(x_pos[0]+i, y))
 						return false;
 				}
@@ -80,7 +87,7 @@ public class Board {
 			// West?
 			else if ( (x == x_pos[0]) && (y < x_pos[1])) {
 				// check each square left of "x"
-				for (int i = 1; i <= (x_pos[1] - y); i++) {
+				for (int i = 1; i <= c_dist; i++) {
 					if (isFilled(x, x_pos[1]-i))
 						return false;
 				}
@@ -89,14 +96,16 @@ public class Board {
 			// East?
 			else if ( (x == x_pos[0]) && (y > x_pos[1])) {
 				// check each square right of "x"
-				for (int i = 1; i <= (y - x_pos[1]); i++) {
+				for (int i = 1; i <= c_dist; i++) {
 					if (isFilled(x, x_pos[1]+i))
 						return false;
 				}
 				return true; // checked each square above "x", no obstructions
 			} 
-			
-			// now have to check diagonals
+			// Now we have to check diagonals
+			else if (r_dist == c_dist) {
+
+			}
 
 		} else {
 
@@ -107,7 +116,7 @@ public class Board {
 
 	public boolean outOfBounds(int x, int y)
 	{
-		if (x > 7 || x < 1 || y > 7 || y < 1)
+		if (x > 7 || x < 0 || y > 7 || y < 0)
 			return true;
 
 		return false;
@@ -187,34 +196,32 @@ public class Board {
 	public static void main(String[] args) {
 		Board asdf = new Board();
 		asdf.printBoard();
+		// CARDINAL DIRECTIONS
+
 		asdf.move("x", 2, 2);
 		asdf.move("x", 5, 2);
 		asdf.move("x", 8, 2);
 
 		asdf.printBoard();
-		
+
 		System.out.println("seeing if I can move north with obstacles");
 		asdf.move("x", 3, 2); 
 		asdf.move("x", 1, 2);
-		
 		asdf.move("x", 5, 1);
 		asdf.printBoard();
-		
+
 		System.out.println("seeing if I can move east with obstacles");
-		asdf.move("x", 5, 6);
-		
-		asdf.move("x", 6, 2);
-		asdf.move("x", 6, 8);
+		asdf.move("x", 5, 8);
 		asdf.printBoard();
-		
+
 		System.out.println("seeing if I can move west with obstacles");
-		asdf.move("x", 6, 1);
-		
+		asdf.move("x", 8, 4);
+		asdf.move("x", 8, 1);
+
 		//seeing if I can move south with obstacles
 		System.out.println("Moving south with obstacles, also trying to overwrite player o");
 		asdf.move("x", 8, 8);
 		asdf.printBoard();
-
 
 	}
 

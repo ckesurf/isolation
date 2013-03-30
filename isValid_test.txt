@@ -1,1 +1,29 @@
-asdf
+		Board asdf = new Board();
+		asdf.printBoard();
+		
+		// CARDINAL DIRECTIONS
+
+		asdf.move("x", 2, 2);
+		asdf.move("x", 5, 2);
+		asdf.move("x", 8, 2);
+
+		asdf.printBoard();
+
+		System.out.println("seeing if I can move north with obstacles");
+		asdf.move("x", 3, 2); 
+		asdf.move("x", 1, 2);
+		asdf.move("x", 5, 1);
+		asdf.printBoard();
+
+		System.out.println("seeing if I can move east with obstacles");
+		asdf.move("x", 5, 8);
+		asdf.printBoard();
+
+		System.out.println("seeing if I can move west with obstacles");
+		asdf.move("x", 8, 4);
+		asdf.move("x", 8, 1);
+
+		//seeing if I can move south with obstacles
+		System.out.println("Moving south with obstacles, also trying to overwrite player o");
+		asdf.move("x", 8, 8);
+		asdf.printBoard();
