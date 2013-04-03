@@ -34,6 +34,14 @@ public class Board {
 		}
 		System.out.println();
 	}
+	
+	public String opponent(String player)
+	{
+		if (player.equals("x"))
+			return "o";
+		else
+			return "x";
+	}
 
 	public boolean isFilled(int x, int y)
 	{
@@ -223,6 +231,39 @@ public class Board {
 			System.out.println("Not valid");
 	}
 
+	public int spaceHeuristic(String player){
+		/* base case 1: if player has lost, return negative MAX */
+		if (lose(player))
+			return -Integer.MAX_VALUE;
+		/* base case 2: if opponent has lost, return positive MAX */
+		else if (lose(opponent(player)))
+			return Integer.MAX_VALUE;
+		
+		
+		int empty_spaces = 0;
+		int r_pos, c_pos;
+		if (player.equals("x")) { 	/* "x" location */
+			r_pos = x_pos[0];
+			c_pos = x_pos[1];
+		} else {					/* "o" location */
+			r_pos = o_pos[0];
+			c_pos = o_pos[1];
+		}
+		for (int i = -2; i < 3; i++) {
+			for (int j = -2; j < 3; j++) {
+				/* if spot in question is our center (main),
+				 * or is out of bounds, skip
+				 */
+				if (i == j || outOfBounds(r_pos+i, c_pos+j))
+					; 
+				/* else if empty, increment count */
+				else if (isEmpty(r_pos+i, c_pos+j))
+					empty_spaces++;
+			}
+		}
+		return empty_spaces;
+	}
+	
 	/**
 	 * @param args
 	 */
@@ -230,7 +271,7 @@ public class Board {
 		Board asdf = new Board();
 		asdf.printBoard();
 
-		asdf.move("o", 6, 3); // shouldnt work
+		System.out.println(asdf.spaceHeuristic("x"));
 	}
 
 }
