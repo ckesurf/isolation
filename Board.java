@@ -1,10 +1,16 @@
+import java.util.LinkedList;
+import java.util.List;
+
 //import java.lang.Math;
 
 
 public class Board {
 	public String[][] board;
-	public int[] x_pos = {0, 0};
-	public int[] o_pos = {7, 7};
+	public int[] x_pos;
+	public int[] o_pos;
+	public Board parent;
+	public List<Board> children;
+
 
 	public Board()
 	{
@@ -16,6 +22,31 @@ public class Board {
 		}
 		board[0][0] = "x";
 		board[7][7] = "o";
+
+		x_pos = new int[2];
+		x_pos[0] = 0;
+		x_pos[1] = 0;
+
+		o_pos = new int[2];
+		o_pos[0] = 7;
+		o_pos[1] = 7;
+
+	}
+
+	public Board(Board board2) {
+		board = new String[8][8];
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				board[i][j] = board2.board[i][j];
+			}
+		}
+		x_pos = new int[2];
+		x_pos[0] = board2.x_pos[0];
+		x_pos[1] = board2.x_pos[1];
+
+		o_pos = new int[2];
+		o_pos[0] = board2.o_pos[0];
+		o_pos[1] = board2.o_pos[1];
 	}
 
 	public void printBoard()
@@ -34,7 +65,7 @@ public class Board {
 		}
 		System.out.println();
 	}
-	
+
 	public String opponent(String player)
 	{
 		if (player.equals("x"))
@@ -231,15 +262,75 @@ public class Board {
 			System.out.println("Not valid");
 	}
 
-	public int spaceHeuristic(String player){
+	public Board moveNew(String player, int x, int y)
+	{
+		x--;
+		y--;
+		Board new_board = null;
+		//implement isValid() here!
+		if (isValid(player, x, y)){
+			new_board = new Board(this);
+			if (player.equals("x")) {
+				// replace x's pos with "*"
+				new_board.board[x_pos[0]][x_pos[1]] = "*";
+				// new_board.board now has new position of x
+				new_board.board[x][y] = "x";
+				// update x's registered position
+				new_board.x_pos[0] = x;
+				new_board.x_pos[1] = y;
+			} else if (player.equals("o")){
+				new_board.board[o_pos[0]][o_pos[1]] = "*";
+				new_board.board[x][y] = "o";
+				new_board.o_pos[0] = x;
+				new_board.o_pos[1] = y;
+			} else {
+				System.out.println("error: invalid player");
+			}
+		} else
+			System.out.println("Not valid");
+
+		return new_board;
+	}
+
+	public void generateMoves(String player)
+	{
+		children = new LinkedList<Board>();
+		int r_pos, c_pos;
+		if (player.equals("x")) { 	/* "x" location */
+			r_pos = x_pos[0];
+			c_pos = x_pos[1];
+		} else {					/* "o" location */
+			r_pos = o_pos[0];
+			c_pos = o_pos[1];
+		}
+		/* increment r_pos and c_pos because we're sending them to moveNew,
+		 * which assumes the parameters are User offset, i.e. starts at 1
+		 */
+		r_pos++;
+		c_pos++;
+		/* only one move away for now */
+		for (int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j++) {
+				if (i != 0 || j != 0) {
+					Board b = this.moveNew(player, r_pos+i, c_pos+j);
+					if (b != null)
+						children.add(b);
+				}
+			}
+
+		}
+	}
+
+	public int spaceHeuristic(String player)
+	{
 		/* base case 1: if player has lost, return negative MAX */
 		if (lose(player))
 			return -Integer.MAX_VALUE;
 		/* base case 2: if opponent has lost, return positive MAX */
 		else if (lose(opponent(player)))
 			return Integer.MAX_VALUE;
-		
-		
+
+
 		int empty_spaces = 0;
 		int r_pos, c_pos;
 		if (player.equals("x")) { 	/* "x" location */
@@ -254,7 +345,7 @@ public class Board {
 				/* if spot in question is our center (main),
 				 * or is out of bounds, skip
 				 */
-				if (i == j || outOfBounds(r_pos+i, c_pos+j))
+				if ((i == 0 && j == 0) || outOfBounds(r_pos+i, c_pos+j))
 					; 
 				/* else if empty, increment count */
 				else if (isEmpty(r_pos+i, c_pos+j))
@@ -263,15 +354,20 @@ public class Board {
 		}
 		return empty_spaces;
 	}
-	
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		Board asdf = new Board();
+		//asdf.move("x", 4, 4);
 		asdf.printBoard();
 
-		System.out.println(asdf.spaceHeuristic("x"));
+		asdf.generateMoves("x");
+
+		for (Board child : asdf.children)
+			child.printBoard();
+
 	}
 
 }
