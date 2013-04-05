@@ -57,7 +57,7 @@ Enter col:
 My "goodness" evaluation function searched how much empty space was immediately
 surrounding the given player on a given board. The program was only able to
 give return a move in the alloted time (one minute, in our case) if I limited
-the depth limit to 5 moves. Otherwise, it would take over 2 minutes at a time.
+the depth limit to 6 moves. Otherwise, it would take over 2 minutes at a time.
 I also limited the "breadth" of moves the program could investigate, or the 
 reach; basically the computer could really only move at most 4 squares away;
 this improved efficiency drastically when experimenting with depth limits.
@@ -79,3 +79,7 @@ Pair.java
 	the evaluation (or "score") of a Board and the Board itself in 
 	BESTMOVE.
 
+TimerBoard.java
+	- this implements timer functionality for ensuring that the program
+	does not take more than one minute to come to a decision during
+	BESTMOVE. 

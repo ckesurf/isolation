@@ -1,7 +1,7 @@
 
 
 main:
-	javac Board.java Pair.java
+	javac Board.java Pair.java TimerBoard.java
 
 play: 
 	java Board
