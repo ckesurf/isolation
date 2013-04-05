@@ -33,7 +33,7 @@ public class Board {
 		o_pos[0] = 7;
 		o_pos[1] = 7;
 		children = new LinkedList<Board>();
-		REACH = 2;
+		REACH = 4;
 
 	}
 
@@ -443,7 +443,23 @@ public class Board {
 	}
 
 
-
+	public void printMove(String player)
+	{
+		int r_pos, c_pos;
+		if (player.equals("x")) { 	/* "x" location */
+			r_pos = x_pos[0];
+			c_pos = x_pos[1];
+		} else {					/* "o" location */
+			r_pos = o_pos[0];
+			c_pos = o_pos[1];
+		}
+		/* transform to User offset */
+		r_pos++;
+		c_pos++;
+		System.out.println("Computer moves: (" + r_pos + ", " + c_pos + ")");
+	}
+	
+	
 
 	/**
 	 * @param args
@@ -462,6 +478,7 @@ public class Board {
 //		asdf.move("x", 1, 4);
 //		asdf.move("x", 1, 3);
 		asdf.printBoard();
+		String op = asdf.opp(player);
 		
 		
 		if (player.equals("x")) {
@@ -485,11 +502,13 @@ public class Board {
 			/* start the game: if player was o, computer, or "x" will go first 
 			 * Remember, you are player, computer is always opp(player)
 			 */
-			p = asdf.BESTMOVE(5, -Integer.MAX_VALUE, Integer.MAX_VALUE, asdf.opp(player));
+			System.out.println("Computer is choosing move...");
+			p = asdf.BESTMOVE(5, -Integer.MAX_VALUE, Integer.MAX_VALUE, op);
 			asdf = p.getR();
 			asdf.printBoard();
+			asdf.printMove(op);
 			
-			if (asdf.lose(asdf.opp(player))) {
+			if (asdf.lose(op)) {
 				System.out.println(player + " wins!");
 				return;
 			}
@@ -507,8 +526,9 @@ public class Board {
 			}
 			asdf.move(player, row, col);
 			asdf.printBoard();
+			//System.out.println("Computer moves: " + )
 			if (asdf.lose(player)) {
-				System.out.println(asdf.opp(player) + " wins!");
+				System.out.println(op + " wins!");
 				return;
 			}
 		}
