@@ -393,12 +393,13 @@ public class Board {
 		}
 	}
 
-	public public Pair<Integer, Board> BESTMOVE(int depth, int MyBest, int HerBest, String player)
+	public Pair<Integer, Board> BESTMOVE(int depth, int MyBest, int HerBest, String player)
 	{
-		
+		timer = new TimerBoard();
+		return BESTMOVE_recurse(depth, MyBest, HerBest, player);
 	}
 
-	public Pair<Integer, Board> BESTMOVE-recurse(int depth, int MyBest, int HerBest, String player)
+	public Pair<Integer, Board> BESTMOVE_recurse(int depth, int MyBest, int HerBest, String player)
 	{
 
 		Pair<Integer, Board> p;
@@ -422,7 +423,7 @@ public class Board {
 
 			while (move_list.size() > 0) {
 
-				Pair<Integer, Board> Try = move_list.getFirst().BESTMOVE(depth-1, -HerBest, -MyBest, opp(player));
+				Pair<Integer, Board> Try = move_list.getFirst().BESTMOVE_recurse(depth-1, -HerBest, -MyBest, opp(player));
 				int tryscore = -Try.getL();
 				if (tryscore >= best_score) {
 					best_score = tryscore;
@@ -435,6 +436,11 @@ public class Board {
 				}
 
 				move_list.removeFirst();
+				if (timer.count > 60) {
+					p = new Pair<Integer, Board>(best_score, best_move); // alpha-beta pruning here
+					return p;
+				}
+					
 
 			} // out of while
 			
@@ -498,7 +504,7 @@ public class Board {
 			 * Remember, you are player, computer is always opp(player)
 			 */
 			System.out.println("Computer is choosing move...");
-			p = asdf.BESTMOVE(5, -Integer.MAX_VALUE, Integer.MAX_VALUE, op);
+			p = asdf.BESTMOVE(7, -Integer.MAX_VALUE, Integer.MAX_VALUE, op);
 			asdf = p.getR();
 			asdf.printBoard();
 			asdf.printMove(op);

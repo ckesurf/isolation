@@ -8,6 +8,7 @@ public class TimerBoard extends JFrame
 	
 	public TimerBoard()
 	{
+		count = 0;
 		timer = new Timer(1000, new TimerListener());
 		timer.start();
 	}
@@ -17,7 +18,6 @@ public class TimerBoard extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
 			count++;
-			System.out.println(count + " seconds elapsed");
 		}
 	}
 
