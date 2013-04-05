@@ -2,10 +2,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-//import java.lang.Math;
 
 public class Board {
 	public static int REACH;
+	public static TimerBoard timer;
 
 	public String[][] board;
 	public int[] x_pos;
@@ -393,11 +393,12 @@ public class Board {
 		}
 	}
 
+	public public Pair<Integer, Board> BESTMOVE(int depth, int MyBest, int HerBest, String player)
+	{
+		
+	}
 
-
-
-
-	public Pair<Integer, Board> BESTMOVE(int depth, int MyBest, int HerBest, String player)
+	public Pair<Integer, Board> BESTMOVE-recurse(int depth, int MyBest, int HerBest, String player)
 	{
 
 		Pair<Integer, Board> p;
@@ -470,13 +471,7 @@ public class Board {
 		Scanner scanner = new Scanner( System.in );
 		String player = scanner.nextLine(); 
 		Pair<Integer, Board> p;
-		// set x up to lose
-//		asdf.move("x", 2, 1);
-//		asdf.move("x", 2, 2);
-//		asdf.move("x", 2, 3);
-//		asdf.move("x", 2, 4);
-//		asdf.move("x", 1, 4);
-//		asdf.move("x", 1, 3);
+
 		asdf.printBoard();
 		String op = asdf.opp(player);
 		

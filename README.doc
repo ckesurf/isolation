@@ -1,0 +1,81 @@
+Chris Erlendson
+cke2106
+5 April 2012
+Project 2: Isolation
+COMS W4701 * Artificial Intelligence
+
+*********************************
+
+--- Development Information ---
+
+-Programming Language: Java 
+-Language Version: 1.6
+-Development Environment: Eclipse
+
+*************************************************************************
+
+--- Instructions to compile  ---
+
+1. From the parent directory, make the default target to compile the program.
+    ~/.../nbh2113_assignment3_isolation$ make
+2. From the parent directory, make the play target to run the program.
+    ~/.../nbh2113_assignment3_isolation$ make play
+3. While running the program, type two integers in any format to enter a move.
+    (1 3)
+    (1, 3)
+    1 3
+    1 asdsd 3
+4. Press Ctrl + c, enter (0 0), or any other invalid move  to exit the program.
+
+
+1. Unzip all files from cke2106_Project3_Java.zip
+
+2. Run "make"
+
+3. Run "make play"
+
+4. Enter the appropriate player symbol ('x' or 'o' without quotes)
+
+5. If you are player x, enter the row and then the column afterwards to make a 
+move. Example:
+
+Enter row:
+> 3
+Enter col:
+> 3
+
+6. Otherwise, wait for the computer to make a move and continue from there
+
+7. Play until someone wins!
+
+
+*************************************************************************
+
+--- Program Descripton ---
+
+	This program implements the Minimax search with alpha-beta pruning.
+My "goodness" evaluation function searched how much empty space was immediately
+surrounding the given player on a given board. The program was only able to
+give return a move in the alloted time (one minute, in our case) if I limited
+the depth limit to 5 moves. Otherwise, it would take over 2 minutes at a time.
+I also limited the "breadth" of moves the program could investigate, or the 
+reach; basically the computer could really only move at most 4 squares away;
+this improved efficiency drastically when experimenting with depth limits.
+
+Files:
+
+Makefile
+	- make 		# for compiling
+	- make play	# for executing the game
+	- clean		# for removing the generated .class files
+
+Board.java
+	- This implements the Board structure and all of the game functions.
+	Most importantly it has BESTMOVE, which implements the Minimax and
+	alpha-beta pruning algorithms
+
+Pair.java
+	- This implements the Pair class which is only used for returning
+	the evaluation (or "score") of a Board and the Board itself in 
+	BESTMOVE.
+
